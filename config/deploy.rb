@@ -86,7 +86,7 @@ namespace :deploy do
           \"payload={ \
             \\\"channel\\\": \\\"#syncpod-server\\\", \
             \\\"username\\\": \\\"deploy\\\", \
-            \\\"text\\\": \\\"#{fetch(:rails_env)}環境へ \`#{fetch(:branch)}\` をデプロイした.\\\", \
+            \\\"text\\\": \\\"#{fetch(:rails_env)}環境へ#{fetch(:branch)}をデプロイした.\\\", \
             \\\"icon_emoji\\\": \\\":chigichan24:\\\"\
           }\" \
         https://hooks.slack.com/services/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
