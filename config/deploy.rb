@@ -6,6 +6,8 @@ set :repo_url, "git@github.com:Mori-Atsushi/YouTubeSyncServer.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+# TODO: あとでmasterに戻す
+set :branch, 'setup-capistrano'
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/var/www/syncpod"
@@ -74,6 +76,21 @@ namespace :deploy do
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
+    end
+  end
+
+  task :cleanup do
+    on roles(:app) do
+      execute <<-COMMAND
+        curl -X POST --data-urlencode \
+          \"payload={ \
+            \\\"channel\\\": \\\"#syncpod-server\\\", \
+            \\\"username\\\": \\\"deploy\\\", \
+            \\\"text\\\": \\\"#{fetch(:rails_env)}環境へ `#{fetch(:branch)}` をデプロイした.\\\", \
+            \\\"icon_emoji\\\": \\\":chigichan24:\\\"\
+          }\" \
+        https://hooks.slack.com/services/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
+      COMMAND
     end
   end
 end
